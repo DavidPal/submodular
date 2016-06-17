@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{fullpage,amssymb,amsthm,amsmath}
+\usepackage{algorithm,algorithmic}
+
+\newcommand{\R}{\mathbb{R}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\begin{document}
+
+\section{Submodularity}
+
+Let $S$ be a finite set. A function $f:2^S \to \R$ is called \emph{monotone} if
+$f(A) \le f(B)$ for all $A,B \subseteq S$ such that $A \subset B$.  A function
+$f:2^S \to \R$ is called \emph{submodular} if for any $A,B \subseteq S$ such
+that $A \subseteq B$,
+$$
+f(A \cup \{x\}) - f(A) \ge f(B \cup \{x\}) - f(B) \; .
+$$
+
+\subsection{Submodular Maximization}
+
+Suppose we are given a non-negative monotone submodular function $f:2^S \to
+\R$. Suppose we are given $k \ge 0$ and we want to find a set $A$ of
+cardinality (at most) $k$ such that $f(A)$ is maximized. We show that a simple
+greedy algorithm achieves $(1-1/e) \approx 0.632$ approximation.
+
+The algorithm is stated as Algorithm~\ref{algorithm:submodular-greedy}.
+The algorithm produces a sequence of sets $A_0, A_1, A_2, \dots, A_k$
+where $A_0 \subseteq A_1 \subseteq A_2 \subseteq \dots \subseteq A_k$.
+$A_0$ is the empty set and $A_k$ is the final output. Also note that $|A_i| = i$
+and $f(A_0) \le f(A_1) \le \dots \le f(A_k)$ due to monotonicity of $f$.
+
+\begin{algorithm}[t]
+\caption{Greedy algorithm for submodular maximization \label{algorithm:submodular-greedy}}
+\begin{algorithmic}[1]
+{
+\REQUIRE{Nonnegative monotone submodular function $f:2^S \to \R$}
+\REQUIRE{Limit on cardinality $k$ ($0 \le k \le |S|$).}
+\STATE{Initialize $A_0 = \emptyset$}
+\FOR{$i=1,2,\dots,k$}
+\STATE{$x_i \leftarrow \argmax_{x \in S \setminus A_{i-1}} f(A_{i-1} \cup \{x\})$}
+\STATE{$A_i \leftarrow A_{i-1} \cup \{x_i\}$}
+\ENDFOR
+\STATE{Output $A_k$}
+}
+\end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
